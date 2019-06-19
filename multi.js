@@ -2,7 +2,7 @@ var array1=[[1,1],[2,2],[3,3]];
 var array2=[[1,1,1],[2,2,2]];
    
 len_row=array1.length;
-len_col=array1[0].length;
+len_col=array [0].length;
 len_row1=array2.length;
 len_col1=array2[0].length;
 //console.log(len_row);
