@@ -1,66 +1,104 @@
-
 var num = process.stdin
 console.log("Enter The number ")
-
 num.on('data', function (data)
 {
     if(data =='exit')
     {
         process.exit()
     }
-     var num1 = parseInt(data)
-    var leng = num1.length
-    var temp1 
-
-    var unit = ["zero","one","Two","Three","four","Five","six","seven","eight","nine"]
-    var arr = ["","Eleven","tweleve","Thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
-    var two_digit = ["ten","twenty","thirty","fourty","fifty","sixty","seventy","eighty","ninety"]
-    var three_digit =["Hundred","thousand"]
-
-    if(num1>=0 && num1<=9)
-    {
-        console.log("input enetred is = " +unit[num1])
-    }
-    else if(num1>=11 && num1<=19)
-    {
-          console.log("input enetred is = " +arr[num1-10])
-    }
     
-    else if(num1>=20 && num1<=99)
-    {
-        var temp=0
-        temp = num1 / 10
-        t=parseInt(temp)
-     
-        temp1 = num1 % 10
-       console.log("input enetred is = "  +two_digit[t-1] + "  "+unit[temp1])
-  }
-    else if(num1>=100 && num1<=999)
-    {
-        myfunction3(num1)
-    }
-    else if(num1>= 1000 && num1<= 9999)
-    {
-         temp = num1 / 1000
-         t=parseInt(temp)
-         num1 = num1 % 1000
-        console.log(" " +unit[t] +" "+three_digit[1]+" and ")
-         
-         var i =myfunction3(num1)
-      }
 
- function myfunction3(demo)
- {
-    var temp=0
-    temp = (num1 / 100)
-     t=parseInt(temp)
-    var rem = (num1 % 100)
-     num1 = rem / 10
-    t1=parseInt(num1)
+    var unit_digit = [ "zero","one","Two","Three","four","Five","six","seven","eight","nine","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+    "Seventeen","Eighteen","Nineteen","Twenty","Thirty","Fourty","Fifty","Sixty","Seventy","Eighty","Ninety"]
+var double_digit  = ["","Thousand ","Million","Billion","Million","Billion","Trillion","Quadrillion","Quintillion","Sextillion","Septillion","Octillion","Nonillion","Decillion"]
+var out = ""
+    
+    var input = data.toString().slice(0,data.length-2)
+    
+  //  console.log(input)
+    var arr = []
+    if(input == 0)
+    {
+        console.log("Zero")
+    }
+    if(input.length>3)          
+    {
+        var len= input.length
+        while(len > 0)
+        {
+            arr.push(input.slice(Math.max(len-3,0),len).toString())             
+            len = Math.max(len-3,0) 
+        }
+        arr = arr.reverse()
+     }
+    else
+    {
+        arr.push(input)
+    }
+    console.log(arr)
+
+     for(var i=0;i<arr.length;i++)
+    {
+        if(arr[i] != 0 )
+        {   
+            var out=out+three_digit(arr[i].toString())+" "+double_digit[arr.length-i-1]+ " "
+        }
+    }
+    console.log(""+out.split('  ').join(' '))
+
+    function unit(input,len) {        
+        var x = parseInt(input[len] );
+        if((x>9 && x<20) || x % 10 ==0)
+        {
+            return {sym: unit_digit[x],pos: 1}
+           // console.log(unit_digit[x]+"")
+            
+        }
+        else
+        {
+            
+            x= parseInt(input[len]+"0")
+            return {sym: unit_digit[x],pos: 0}
+    
+        }}
+
+    function three_digit(input)                 
+{
    
-   temp1 = rem % 10
-   t2=parseInt(temp1)
+    var out = ""
     
-console.log("  "+unit[t]+ " "+three_digit[0]+ " "+ two_digit[t1-1]+" "+unit[t2]  )
- }
-});
+    for(var i =0;i<input.length;i++)
+    { 
+        var pos = input.length - i
+        if(input[i] == 0)
+        {
+            continue
+        }
+        if(pos==2)  
+        { 
+            if(unit(input,i).pos == 1)
+            {
+                
+                out = out +" "+ unit(input,i)
+                i= i + 1   
+            }
+            else                        
+            {
+                out = out +" "+ unit(input,i)
+              //  i=i+1 
+            }
+           
+        }
+        else if(pos==3)
+        {
+            out = unit_digit[input[i]] + " hundred"+out
+        }
+        else
+        {
+            out = out + " "+ unit_digit[input[i]]
+        }
+
+    }
+    return out      
+}
+ });   
