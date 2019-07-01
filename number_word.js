@@ -47,19 +47,19 @@ var out = ""
     console.log(""+out.split('  ').join(' '))
 
     function unit(input,len) {        
-        var x = parseInt(input[len] );
+        var x = parseInt(input[len]+input[len+1] );
+        console.log(x)
         if((x>9 && x<20) || x % 10 ==0)
         {
-            return {sym: unit_digit[x],pos: 1}
-           // console.log(unit_digit[x]+"")
+            console.log(" dfghjgfds"+unit_digit[x])
+            //return {sym: unit_digit[parseInt(x)],pos: 1}
+          
             
         }
         else
         {
-            
-            x= parseInt(input[len]+"0")
-            return {sym: unit_digit[x],pos: 0}
-    
+            x= 20+parseInt(input[len])
+            return unit_digit[x-1]
         }}
 
     function three_digit(input)                 
@@ -70,32 +70,24 @@ var out = ""
     for(var i =0;i<input.length;i++)
     { 
         var pos = input.length - i
+       // console.log(pos)
         if(input[i] == 0)
         {
             continue
         }
+      
         if(pos==2)  
         { 
-            if(unit(input,i).pos == 1)
-            {
-                
-                out = out +" "+ unit(input,i)
-                i= i + 1   
-            }
-            else                        
-            {
-                out = out +" "+ unit(input,i)
+                out = out +" "+ unit(input,i) 
               //  i=i+1 
-            }
-           
         }
         else if(pos==3)
         {
-            out = unit_digit[input[i]] + " hundred"+out
+            out = unit_digit[input[i]] + " hundred"+out 
         }
         else
         {
-            out = out + " "+ unit_digit[input[i]]
+            out = out + " "+ unit_digit[input[i]] 
         }
 
     }
