@@ -6,16 +6,12 @@ num.on('data', function (data)
     {
         process.exit()
     }
-    
-
-    var unit_digit = [ "zero","one","Two","Three","four","Five","six","seven","eight","nine","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+    var unit_digit = [ "zero","one","Two","Three","four","Five","six","seven","eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
     "Seventeen","Eighteen","Nineteen","Twenty","Thirty","Fourty","Fifty","Sixty","Seventy","Eighty","Ninety"]
-var double_digit  = ["","Thousand ","Million","Billion","Million","Billion","Trillion","Quadrillion","Quintillion","Sextillion","Septillion","Octillion","Nonillion","Decillion"]
+var double_digit  = ["","Thousand ","Million","Billion","Million","Billion","Trillion","Quadrillion","Quintillion","Sextillion","Septillion","Octillion"]
 var out = ""
     
     var input = data.toString().slice(0,data.length-2)
-    
-  //  console.log(input)
     var arr = []
     if(input == 0)
     {
@@ -49,38 +45,42 @@ var out = ""
     function unit(input,len) {        
         var x = parseInt(input[len]+input[len+1] );
         console.log(x)
-        if((x>9 && x<20) || x % 10 ==0)
-        {
-            console.log(" dfghjgfds"+unit_digit[x])
-            //return {sym: unit_digit[parseInt(x)],pos: 1}
-          
-            
-        }
+        if(x>9 && x<20 )
+         {
+            x=parseInt(input[len]+input[len+1])
+            return unit_digit[x]
+        } 
         else
         {
             x= 20+parseInt(input[len])
-            return unit_digit[x-1]
-        }}
+            return unit_digit[x-2]
+        }
+    }
 
     function three_digit(input)                 
-{
-   
-    var out = ""
-    
-    for(var i =0;i<input.length;i++)
+    {
+        var out = ""
+     for(var i =0;i<input.length;i++)
     { 
         var pos = input.length - i
-       // console.log(pos)
+       
         if(input[i] == 0)
         {
             continue
         }
-      
         if(pos==2)  
         { 
+            if(input[i]+input[i+1] > 9 && input[i]+input[i+1]< 20 )
+            {
                 out = out +" "+ unit(input,i) 
-              //  i=i+1 
-        }
+                i = i+1
+            }
+            else
+            {
+                out = out +" "+ unit(input,i) 
+            }
+
+         }
         else if(pos==3)
         {
             out = unit_digit[input[i]] + " hundred"+out 
@@ -88,8 +88,8 @@ var out = ""
         else
         {
             out = out + " "+ unit_digit[input[i]] 
+        
         }
-
     }
     return out      
 }
