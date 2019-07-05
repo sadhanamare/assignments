@@ -31,13 +31,13 @@ add(element)
     else { 
         current = this.head; 
 
-        while (current.next) { 
+        while (current.next != null) { 
             current = current.next; 
         } 
         current.next = node; 
     } 
     this.size++; 
-    ll.save();
+    
 } 
 
 insertAt(element, index) 
@@ -75,14 +75,13 @@ insertAt(element, index)
 
 removeFrom(index) 
 { 
+    console.log("rtyuytyutyuyt")
     if (index > 0 && index > this.size) 
         return -1; 
     else { 
-        var curr, prev, it = 0; 
+        var curr, prev, it = 1; 
         curr = this.head; 
-        prev = curr; 
-  
-        if (index == 0) { 
+        if (index == 1) { 
             this.head = curr.next; 
         } 
         else { 
@@ -115,7 +114,7 @@ printList()
     var curr = this.head; 
     var str = ""; 
     while (curr) { 
-        str += curr.element + " "; 
+        str =str + curr.element + " "; 
         curr = curr.next; 
     } 
     console.log(str); 
@@ -159,24 +158,35 @@ function createbook()
 });
 }
 
-function deletebook(book)
+function del()
 {
-    if(fs.existsSync(path+book+'.txt') == true)
-    {
-        fs.unlinkSync(path+book+".txt")
-        console.log("File Deleted")
-        return 0 
-    }
-    console.log("File Does not exist")
-    return 0
+    var fname = rr.question("enter the file name (to be deleted):");
+    fname=path+fname+".txt"
+    deleteFile(fname)
+}
+
+function deleteFile(file)
+{
+    fs.unlink(file, function (err) {
+        if (err) 
+        {
+            console.log("file does not exist")
+            choices()
+        }
+        else
+        {
+            console.log('File deleted!');
+            choices()
+        }
+      });
 }
 
 function toFile(bk,data,f)
 {
-    if(f==0)
+    if(parseInt(f)==0)
     {
         console.log("***************")
-    fs.writeFileSync(path+bk+".txt","\n"+data,{encoding:'utf-8',flag:'w'})
+    fs.writeFileSync(path+bk+".txt",data,{encoding:'utf-8',flag:'w'})
     }
     else
     {  
@@ -186,22 +196,13 @@ function toFile(bk,data,f)
 
 function fromFile(bk)
 {
-  
-   // fs.readFile(path+bk+".txt")
-   fs.readFile(path+bk+".txt", 'utf-8',(err, element) => { 
-    if (err) throw err; 
-    console.log(element.toString()); 
-}) 
-   // var tmp=temp.toString() 
+    var tmp = fs.readFileSync(path+bk+".txt")
+    for(let i in tmp){
+        console.log(tmp[i]);
+    }
+    
 }
 
-/*function tofile1(name,data)
-{
-fs.writeFile(name+'.txt', data, (err) => { 
-    if (err) throw err; 
-}) 
-
-}*/
 function choices()
 {
     console.clear();
@@ -216,32 +217,26 @@ function choices()
     console.log("8.Exit")
 
     var r1 = require("readline")
-   // var choice 
     
 prompts.question("Enter the choice: ", function(choice){
 
    var ch=parseInt(choice)
 switch(ch)
 {
-    
-case 1:  createbook() ; 
-        line1()          
+    case 1:  createbook() ; 
+            line1()          
         break;
-
 case 2:  readbook()
-
         break
-
- case 3: line1()                                  //. Append end of File")
+case 3: line1()                                  //. Append end of File")
         break
-case 4:// fileToLL()      
-        insertFile()                               //4.Insert in between File")
+case 4: insertFile()                               //4.Insert in between File")
         break
-case 5:                             //.Delete line from book")
+case 5:  delete_b_line()                      //.Delete line from book")
         break
 case 6:  b_list()                                        //list
         break
- case 7:                                        //delete
+ case 7: del()                                   //delete
         break
 case 8:                                         //exit
         break
@@ -250,29 +245,20 @@ default:                             //default
 });
 }
 
-
-//var prompts= r1.createInterface(process.stdin,process.stdout)
-
 var i =""   
-  
-
-var ll = new LinkedList(this.bk);
-
- // var bk =" "
-      
+var ll = new LinkedList(this.bk);      
 function line1()
 {
     prompts.question("enter the book name:",function(bk)
 {
-    
-//createbook();
+
 var curr = this.head;
 
     if(fs.existsSync(path+bk+'.txt') == true)
     {
       //  console.log("File Already Exist")
      while(1){
-    var i=rr.question("enter the lines\n:")
+    var i=rr.question("enter the lines\n:");
         
             if(i.toString() === '++')
             {
@@ -318,8 +304,6 @@ fs.readdir(directoryPath, function (err, files) {
 });
 }
 
-
-
 function readbook()
 {
     prompts.question("enter the book name:",function(bk)
@@ -328,8 +312,7 @@ function readbook()
     {
         console.log("File Already Exist...\n ")
         ll.read(bk)
-        //return bk
-       // choices()
+
     }
     else
     {
@@ -342,73 +325,66 @@ function insertFile()
 {
     bk=rr.question("enter the book name:")
     
-         var curr = this.head;
     
         if(fs.existsSync(path+bk+'.txt') == true)
         {
-        
-                var abc = new LinkedList(bk)
-                var arr = fs.readFileSync(path+bk+".txt",{encoding :'utf-8'});
-               // var np = arr.toString();
-               console.log("111111111111")
-    console.log(arr)
-                   
-                for( let i=0;i<arr.length;i++)
+                ll.name = bk
+                
+                var arr = fs.readFileSync(path+bk+".txt",{encoding :'utf-8'}).split(/\n|\r/);
+              
+                   for( let i=0;i<arr.length;i++)
                 {
+                    
+                     ll.add(arr[i].toString())
                    
-                     abc.add(arr[i].toString())
-                    //ss=s.toString()
                 }
-                var i=rr.question("enter the lines:")
+                console.log(ll); 
+                console.log(""+arr)
+                var l=rr.question("enter the lines:")
                 var j=rr.question("enter the index\n:")
-               abc.insertAt(i,j)
-                //abc.add(i)
-               
-                abc.printList()
+               ll.insertAt(l,parseInt(j))
+            
+                ll.save(bk)
+                ll.printList()
         }
              else
             {  
                 console.log(" Invalid File name !! ")
-               // line1()
+               
             }   
-            abc.save(bk)
-        
-        }
-    /*readbook()
-    
-    
-   
-   */
-
-
-
-/*function fileToLL()
-{
-    prompts.question("enter the book name:",function(bk)
-{
-    
-//createbook();
-var curr = this.head;
-
-    if(fs.existsSync(path+bk+'.txt') == true)
-    {
-      //  console.log("File Already Exist")
-    while(1){
-            var abc = new LinkedList(bk)
-            var arr = fs.readFileSync(path+name+".txt");
-
-            for( let i=0;i<arr.length;i++)
-            {
-                abc.add(arr[i])
-            }
-            }
+           
     }
-        
-        else
-        {  
-            console.log(" Invalid File name !! ")
-            line1()
-        }    
-});
-    abc.printList()
-}*/
+    function delete_b_line()
+    {
+        bk=rr.question("enter the book name:")
+    
+    
+        if(fs.existsSync(path+bk+'.txt') == true)
+        {
+                ll.name = bk
+                
+                var arr = fs.readFileSync(path+bk+".txt",{encoding :'utf-8'}).split(/\n|\r/);
+              
+                   for( let i=0;i<arr.length;i++)
+                {
+                    
+                     ll.add(arr[i].toString())
+                   
+                }
+                console.log(ll); 
+                console.log(""+arr)
+
+                line_n=rr.question("enter the line number to delete")
+                line_num=parseInt(line_n)
+
+                ll.removeFrom(line_num)
+                ll.save(bk)
+                ll.printList()
+            }
+                else
+                {  
+                    console.log(" Invalid File name !! ")
+                   
+                }   
+   
+}
