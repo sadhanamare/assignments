@@ -75,12 +75,13 @@ insertAt(element, index)
 
 removeFrom(index) 
 { 
+    console.log("rtyuytyutyuyt")
     if (index > 0 && index > this.size) 
         return -1; 
     else { 
-        var curr, prev, it = 0; 
+        var curr, prev, it = 1; 
         curr = this.head; 
-        if (index == 0) { 
+        if (index == 1) { 
             this.head = curr.next; 
         } 
         else { 
@@ -156,17 +157,49 @@ function createbook()
     }
 });
 }
-
-function deletebook(book)
+/*
+function deletebook()
 {
-    if(fs.existsSync(path+book+'.txt') == true)
+    bk=rr.question("enter the book name:")
+    
+if(fs.existsSync(path+bk+'.txt') == true)
     {
-        fs.unlinkSync(path+book+".txt")
-        console.log("File Deleted")
-        return 0 
+        console.log(" File is Exists")
+        fs.unlink(path+bk, function (err) {
+        if (err) throw err
+        console.log('File deleted!')
+      });
     }
-    console.log("File Does not exist")
-    return 0
+      else
+      {
+          console.log("Invalid File")
+      }
+
+}
+*/
+
+
+function del()
+{
+    var fname = rr.question("enter the file name (to be deleted):");
+    fname=path+fname+".txt"
+    deleteFile(fname)
+}
+
+function deleteFile(file)
+{
+    fs.unlink(file, function (err) {
+        if (err) 
+        {
+            console.log("file does not exist")
+            choices()
+        }
+        else
+        {
+            console.log('File deleted!');
+            choices()
+        }
+      });
 }
 
 function toFile(bk,data,f)
@@ -212,23 +245,19 @@ prompts.question("Enter the choice: ", function(choice){
 switch(ch)
 {
     case 1:  createbook() ; 
-        line1()          
+            line1()          
         break;
-
 case 2:  readbook()
-
         break
-
- case 3: line1()                                  //. Append end of File")
+case 3: line1()                                  //. Append end of File")
         break
-case 4:     
-        insertFile()                               //4.Insert in between File")
+case 4: insertFile()                               //4.Insert in between File")
         break
-case 5:                             //.Delete line from book")
+case 5:  delete_b_line()                      //.Delete line from book")
         break
 case 6:  b_list()                                        //list
         break
- case 7:                                        //delete
+ case 7: del()                                   //delete
         break
 case 8:                                         //exit
         break
@@ -250,7 +279,7 @@ var curr = this.head;
     {
       //  console.log("File Already Exist")
      while(1){
-    var i=rr.question("enter the lines\n:")
+    var i=rr.question("enter the lines\n:");
         
             if(i.toString() === '++')
             {
@@ -346,3 +375,37 @@ function insertFile()
             }   
            
     }
+    function delete_b_line()
+    {
+        bk=rr.question("enter the book name:")
+    
+    
+        if(fs.existsSync(path+bk+'.txt') == true)
+        {
+                ll.name = bk
+                
+                var arr = fs.readFileSync(path+bk+".txt",{encoding :'utf-8'}).split(/\n|\r/);
+              
+                   for( let i=0;i<arr.length;i++)
+                {
+                    
+                     ll.add(arr[i].toString())
+                   
+                }
+                console.log(ll); 
+                console.log(""+arr)
+
+                line_n=rr.question("enter the line number to delete")
+                line_num=parseInt(line_n)
+
+                ll.removeFrom(line_num)
+                ll.save(bk)
+                ll.printList()
+            }
+                else
+                {  
+                    console.log(" Invalid File name !! ")
+                   
+                }   
+   
+}
